@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-
-const INITIAL_CITY = 'blumenau';
+import toCelsius from './../useful/ToCelsius'
 
 export default class CurrentWeather extends Component {
 
@@ -9,14 +8,12 @@ export default class CurrentWeather extends Component {
   }
 
   render() {
-    let {day, main, weather} = this.props;
-    console.log(weather);
+    let {main} = this.props;
     return (
-      <div className="current-weather-board">
-        <div>{day}</div>
-        <div>Temperatura Minima: {main.temp_min -273,15} </div>
-        <div>Temperatura Máxima: {main.temp_max -273,15} </div>
-        <div>{weather.main}</div>
+      <div className="current-weather-board" >
+        <h5> Weather Now: {toCelsius(main.temp)}</h5>
+        <div>Max: {toCelsius(main.temp_max)} </div>
+        <div>Min: {toCelsius(main.temp_min)} </div>
       </div>
     );
   }

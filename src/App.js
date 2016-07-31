@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import Board from './components/Board';
-
+import NextDaysWeatherContainer from './components/NextDaysWeatherContainer';
+import CurrentWeather from './components/CurrentWeather';
+import toCelsius from './useful/ToCelsius';
 
 const INITIAL_CITY = 'blumenau';
 
@@ -10,39 +11,80 @@ export default class App extends Component {
     super(props);
     this.state = {
       weatherInfo : {
-        city : {},
-        list : []
+        current : {
+          main : {}
+        },
+        nextDays : []
       }
     };
-    this.setStateWeather = this.setStateWeather.bind(this);
+
+    this.setStateCurrentWeather = this.setStateCurrentWeather.bind(this);
+    this.setStateWeekWeather = this.setStateWeekWeather.bind(this);
     this.getWeatherInfoFromAPI = this.getWeatherInfoFromAPI.bind(this);
+
     this.getWeatherInfoFromAPI(INITIAL_CITY);
   }
 
   getWeatherInfoFromAPI(cityName) {
-    fetch('http://api.openweathermap.org/data/2.5/forecast?q=jaragua%20do%20sul,uk&appid=197c6f0b4ad4e1e3e234551e5d6fd641')
+    //Ler temperatura atual.
+    fetch('http://api.openweathermap.org/data/2.5/weather?q='+cityName+'&appid=197c6f0b4ad4e1e3e234551e5d6fd641')
     .then(res => {
-    res.json()
-      .then(data => this.setStateWeather(data))
-      .catch( err => console.log(err));
+      res.json()
+      .then(currentData => {
+        //Ler temperatura do resto da semana.
+        fetch('http://api.openweathermap.org/data/2.5/forecast?q=' + cityName +',uk&appid=197c6f0b4ad4e1e3e234551e5d6fd641')
+        .then(response => {
+          response.json()
+            .then(weekData => this.setStateWeekWeather(weekData))
+            .catch( err => console.log(err));
+        })
+        .catch( err => console.log(err));
+        this.setStateCurrentWeather(currentData);
+      })
+      .catch(err => console.log(err))
     })
-    .catch( err => console.log(err));
+    .catch(err => console.log(err));
+
   }
 
-  setStateWeather(data) {
+  setStateCurrentWeather(data) {
+    let {weatherInfo} = this.state;
+    weatherInfo.current = data;
     this.setState({
-      weatherInfo : data
+      weatherInfo : weatherInfo
+    })
+  }
+
+  setStateWeekWeather(data) {
+    let {weatherInfo} = this.state;
+    let {list} = data;
+    weatherInfo.nextDays = list;
+    this.setState({
+      weatherInfo : weatherInfo
     });
   }
 
   render() {
-    let weekWeather = this.state.weatherInfo.list;
+    let {main, name} = this.state.weatherInfo.current;
+    let {nextDays} = this.state.weatherInfo; 
     return (
       <div>
-          <label htmlFor="search-input"> Pesquise pela cidade </label>
-          <input id="search-input" type="text" className="search" placeholder="Pesquisar cidade..."/>
-          <Board weekWeather={weekWeather}/>
+          <h3> Search for the city </h3>
+          <input
+            id="search-input"
+            className="search"
+            type="text"
+            placeholder="Fill with the city name here..."
+            onChange={ (event) => {
+                let city = event.target.value;
+                this.getWeatherInfoFromAPI(city);
+              }
+            }/>
+          <h4>Current Temperature {toCelsius(main.temp)} - {name} </h4>
+          <CurrentWeather main={main}/>
+          <NextDaysWeatherContainer nextDays={nextDays} />
       </div>
     );
   }
+
 }

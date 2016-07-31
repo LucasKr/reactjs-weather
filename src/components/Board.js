@@ -5,10 +5,27 @@ export default class Board extends Component {
 
   constructor(props) {
     super(props);
+    this.nextDaysWeather = this.nextDaysWeather.bind(this);
+  }
+
+  nextDaysWeather(weekWeather) {
+    let weather = [];
+    weekWeather.forEach( (o, idx) => {
+      let lastIdx = idx == 0 ? idx : idx -1;
+      let date = o.dt_txt.substring(0, 10);
+      let dateBefore = weekWeather[lastIdx].dt_txt.substring(0, 10);
+      /*
+      if(dateBefore == date) {
+        console.log('Equals =' + date);
+      } else {
+        console.log('Not Equals =' + date);
+      }*/
+    });
+    return weather;
   }
 
   render() {
-    let {weekWeather} = this.props;
+    let weekWeather = [];
     return (
       <div>
           {
