@@ -8,7 +8,12 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      weatherInfo : {
+        city : {},
+        list : []
+      }
+    };
     this.setStateWeather = this.setStateWeather.bind(this);
     this.getWeatherInfoFromAPI = this.getWeatherInfoFromAPI.bind(this);
     this.getWeatherInfoFromAPI(INITIAL_CITY);
@@ -17,7 +22,7 @@ export default class App extends Component {
   getWeatherInfoFromAPI(cityName) {
     fetch('http://api.openweathermap.org/data/2.5/forecast?q=jaragua%20do%20sul,uk&appid=197c6f0b4ad4e1e3e234551e5d6fd641')
     .then(res => {
-      res.json()
+    res.json()
       .then(data => this.setStateWeather(data))
       .catch( err => console.log(err));
     })
@@ -31,11 +36,12 @@ export default class App extends Component {
   }
 
   render() {
+    let weekWeather = this.state.weatherInfo.list;
     return (
       <div>
           <label htmlFor="search-input"> Pesquise pela cidade </label>
           <input id="search-input" type="text" className="search" placeholder="Pesquisar cidade..."/>
-          <Board  />
+          <Board weekWeather={weekWeather}/>
       </div>
     );
   }
