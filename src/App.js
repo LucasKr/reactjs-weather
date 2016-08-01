@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import NextDaysWeatherContainer from './components/NextDaysWeatherContainer';
 import CurrentWeather from './components/CurrentWeather';
 import toCelsius from './useful/ToCelsius';
+import daysOfWeek from './useful/DaysOfWeek';
 
 const INITIAL_CITY = 'blumenau';
 
@@ -106,6 +107,7 @@ export default class App extends Component {
     let {nextDays} = this.state.weatherInfo;
     let weekDaysWeather = this.listDays(nextDays);
     let {average} = weekDaysWeather;
+
     return (
       <div className="main">
           <label htmlFor="search-input"> City: </label>
@@ -127,11 +129,11 @@ export default class App extends Component {
 
           <NextDaysWeatherContainer
             weekDaysWeather={weekDaysWeather} />
-          
+
           <div className="week-average">
             <div> Average of the week:</div>
-            <div> {average.highestTemp.day} will have the  highest  Temperature { toCelsius(average.highestTemp.temp)} </div>
-            <div> {average.lowestTemp.day} will have lowest  Temperature is { toCelsius(average.lowestTemp.temp)} </div>
+            <div> {daysOfWeek[new Date(average.highestTemp.day).getDay()] } will have the  highest  Temperature { toCelsius(average.highestTemp.temp)} </div>
+            <div> {daysOfWeek[new Date(average.lowestTemp.day).getDay()] } will have lowest  Temperature is { toCelsius(average.lowestTemp.temp)} </div>
           </div>
 
       </div>

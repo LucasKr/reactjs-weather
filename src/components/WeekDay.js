@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import toCelsius from './../useful/ToCelsius'
-
-const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+import daysOfWeek from './../useful/DaysOfWeek';
 
 export default class WeekDay extends Component {
 
