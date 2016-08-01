@@ -19,13 +19,13 @@ input.search {
   border: 1px #ccc solid;
 }
 
-.current-weather-board {
+.weather-board {
   max-width: 100%;
   padding: 10px;
-  border-bottom: 1px solid #555;
+  border-top: 1px solid #555;
   cursor: pointer;
 }
 
-.current-weather-board:hover {
+.weather-board:hover {
   background-color: rgba(0, 0, 0, 0.07);
 }
