@@ -8,12 +8,12 @@ export default class CurrentWeather extends Component {
   }
 
   render() {
-    let {main} = this.props;
+    let {main, cityName} = this.props;
     return (
-      <div className="weather-board-now" >
-        <h5> Weather Now: {toCelsius(main.temp)}</h5>
-        <div>Max: {toCelsius(main.temp_max)} </div>
-        <div>Min: {toCelsius(main.temp_min)} </div>
+      <div className="current-weather">
+        <div className="header">{cityName} current weather: {toCelsius(main.temp)} </div>
+        <div className="max">Max: {toCelsius(main.temp_max)} </div>
+        <div className="min">Min: {toCelsius(main.temp_min)} </div>
       </div>
     );
   }
